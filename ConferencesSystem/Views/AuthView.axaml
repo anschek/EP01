@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ConferencesSystem.Views.AuthView"
+			 xmlns:vm="using:ConferencesSystem.ViewModels"
+             x:DataType="vm:AuthViewModel">
+	<StackPanel HorizontalAlignment="Center" MinWidth="450" IsEnabled="{Binding SystemIsNotFrozen}">
+		<TextBlock Text="Авторизация" HorizontalAlignment="Center" />
+		<TextBlock Text="Логин" />
+		<TextBox Text="{Binding Login}"/> 
+		<TextBlock Text="Пароль"/>
+		<TextBox PasswordChar="*" Text="{Binding Password}"/>
+		<TextBox Watermark="Укажите код с картинки"/>
+		<Button Content="Войти" Command="{Binding Auth}" HorizontalAlignment="Center"/>
+		<TextBlock Text="{Binding ErrorMessage}" Foreground="Red"  HorizontalAlignment="Center"/>		
+	</StackPanel>  
+</UserControl>
