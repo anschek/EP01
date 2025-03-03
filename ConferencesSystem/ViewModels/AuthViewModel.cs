@@ -1,9 +1,10 @@
-﻿using ConferencesSystem.Models;
+﻿using Avalonia.Media.Imaging;
+using ConferencesSystem.Models;
+using ConferencesSystem.Services;
 using ConferencesSystem.Views;
 using ReactiveUI;
 using System.Linq;
 using System.Threading.Tasks;
-using Tmds.DBus.Protocol;
 
 namespace ConferencesSystem.ViewModels
 {
@@ -27,6 +28,8 @@ namespace ConferencesSystem.ViewModels
         public AuthViewModel(MainWindowViewModel mainVm)
         {
             _mainVm = mainVm;
+            _captchaService = new CaptchaService();
+            _captcha = _captchaService.GetCaptcha();
         }
         private int _failedAuthAttempts = 0;
         private string _login = "";
@@ -40,6 +43,14 @@ namespace ConferencesSystem.ViewModels
         public async void Auth()
         {
             User? user = _db.Users.FirstOrDefault(u => u.Id.ToString() == Login && u.Password == Password);
+            if (!_captchaService.CaptchaEnteredCorrectly(_enteredCaptcha))
+            {
+                ++_failedAuthAttempts;
+                ShowErrorMessage($"Каптча введена неверно. Попыток осталось: {3 - _failedAuthAttempts}");
+                _captchaService = new CaptchaService();
+                Captcha = _captchaService.GetCaptcha();
+                return;
+            }
             if (user != null)
             {
                 _mainVm.CurrentView = new UserProfileView(_mainVm, user.Id);
@@ -47,10 +58,11 @@ namespace ConferencesSystem.ViewModels
             else
             {
                 ++_failedAuthAttempts;
-                ShowErrorMessage();
+                ShowErrorMessage($"Учетные данные введены неверно. Попыток осталось: {3 - _failedAuthAttempts}");
 
                 if (_failedAuthAttempts == 3)
                 {
+                    ShowErrorMessage($"Система заблокирована. Повторите попытку через 10 секунд");
                     SystemIsNotFrozen = false;
                     await Task.Delay(10000);
                     _failedAuthAttempts = 0;
@@ -58,12 +70,16 @@ namespace ConferencesSystem.ViewModels
                 }
             }
         }
-        public async void ShowErrorMessage()
+        public async void ShowErrorMessage(string message)
         {
-            ErrorMessage = _failedAuthAttempts < 3 ? $"Попыток осталось: {3 - _failedAuthAttempts}"
-            : $"Система заблокирована. Повторите попытку через 10 секунд";
+            ErrorMessage = message;
             await Task.Delay(4000);
             ErrorMessage = "";
         }
+        private CaptchaService _captchaService;
+        public Bitmap _captcha; 
+        public Bitmap Captcha { get => _captcha; set => this.RaiseAndSetIfChanged(ref _captcha, value); }
+        private string _enteredCaptcha = "";
+        public string EnteredCaptcha { get => _enteredCaptcha; set => this.RaiseAndSetIfChanged(ref _enteredCaptcha, value); }
     }
 }

@@ -12,7 +12,8 @@
 		<TextBox Text="{Binding Login}"/> 
 		<TextBlock Text="Пароль"/>
 		<TextBox PasswordChar="*" Text="{Binding Password}"/>
-		<TextBox Watermark="Укажите код с картинки"/>
+		<Image Width="200" Height="50" Source="{Binding Captcha}"/>
+		<TextBox Watermark="Укажите код с картинки" Text="{Binding EnteredCaptcha}"/>
 		<Button Content="Войти" Command="{Binding Auth}" HorizontalAlignment="Center"/>
 		<TextBlock Text="{Binding ErrorMessage}" Foreground="Red"  HorizontalAlignment="Center"/>		
 	</StackPanel>  
