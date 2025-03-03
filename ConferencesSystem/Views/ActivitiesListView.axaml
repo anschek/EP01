@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ConferencesSystem.Views.ActivitiesListView"
+			 xmlns:vm="using:ConferencesSystem.ViewModels"
+             x:DataType="vm:ActivitiesListViewModel">
+	<Grid RowDefinitions="30,30,*">
+		<TextBlock Grid.Row="0" Text="Мероприятия" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+		<DockPanel  Grid.Row="1" LastChildFill="False">
+			<TextBlock Text="Дата: "/>
+			<DatePicker SelectedDate="{Binding SearchDate}"/>			
+			<TextBlock Text="Направление: "/>
+			<ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" DisplayMemberBinding="{Binding Name}"/>
+			<Button Content="Сбросить фильтры" Command="{Binding ResetFilters}"/>
+			<Button Content="Поиск"/>
+			<Button Content="Авторизация" DockPanel.Dock="Right" Command="{Binding GoToAuthView}"/>
+		</DockPanel>
+		<ListBox Grid.Row="2" ItemsSource="{Binding Activities}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*" >
+						<Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Source="{Binding Image}" MaxWidth="200"/>
+						<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Description}" TextWrapping="Wrap"/>
+						<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Date}" FontWeight="DemiBold"/>
+						<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Type, StringFormat='направление: {0}'}"/>
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
+</UserControl>
