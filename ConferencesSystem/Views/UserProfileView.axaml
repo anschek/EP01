@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ConferencesSystem.Views.UserProfileView"
+			 xmlns:vm="using:ConferencesSystem.ViewModels"
+             x:DataType="vm:UserProfileViewModel">
+	<ScrollViewer>
+		<StackPanel>
+			<TextBlock Text="{Binding ViewDescription}" FontWeight="Bold" FontSize="30" HorizontalAlignment="Center" Margin="0,0,0,40"/>
+
+			<Grid RowDefinitions="0.5*,20,*,20,*,20,*" ColumnDefinitions="0.5*,*,0.5*">
+
+				<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Greeting}"/>
+
+				<TextBlock  Grid.Column="1" Grid.Row="1" Text="Мероприятия"/>
+				<ListBox  Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Activities}" MaxHeight="150"/>
+
+				<TextBlock Grid.Column="1" Grid.Row="3" Text="Участники"/>
+				<ListBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Participants}" MaxHeight="150"/>
+
+				<TextBlock  Grid.Column="1" Grid.Row="5" Text="Жюри"/>
+				<ListBox  Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Jurors}" MaxHeight="150"/>
+
+				<Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Source="{Binding UserAvatar}" Margin="10" MaxHeight="200" MaxWidth="300"/>
+
+				<Border  Grid.Column="0" Grid.Row="4" Grid.RowSpan="2" 
+						 CornerRadius="10" Margin="30" BorderThickness="2" BorderBrush="Black" >
+					<TextBlock Text="Мой профиль" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" />
+				</Border>
+
+				<Button  Grid.Column="2" Grid.Row="0" Content="Регистрация модератора/жюри" 
+						 Command="{Binding GoToRegistrationView}" IsEnabled="{Binding IsOrganizer}" IsVisible="{Binding IsOrganizer}"/>
+
+			</Grid>
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>
