@@ -5,13 +5,22 @@ namespace ConferencesSystem.Models;
 
 public partial class User
 {
+    public User() 
+    {
+        FullName = "";
+        Mail = "";
+        Country = 171;
+        PhoneNumber = "";
+        Password = "";
+        Activities = new List<Activity>();
+    }
     public int Id { get; set; }
 
     public string FullName { get; set; } = null!;
 
     public string Mail { get; set; } = null!;
 
-    public DateTime DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     public int Country { get; set; }
 

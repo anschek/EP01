@@ -95,7 +95,8 @@
 				<Button Grid.Column="4" Content="Отмена" Command="{Binding CancelUserCreation}"/>
 
 			</Grid>
-
+			<TextBlock Text="{Binding ErrorMessage}" MinWidth="300" Foreground="Red"  HorizontalAlignment="Center"/>
+			<Button Content="Выйти" Command="{Binding GoBack}" IsVisible="{Binding СonfirmСancellation}"  HorizontalAlignment="Center"/>
 		</StackPanel>
 	</ScrollViewer>
 

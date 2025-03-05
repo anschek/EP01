@@ -5,9 +5,9 @@ namespace ConferencesSystem.Views;
 
 public partial class UserRegistrationView : UserControl
 {
-    public UserRegistrationView(MainWindowViewModel mainVM)
+    public UserRegistrationView(MainWindowViewModel mainVM, int userId)
     {
         InitializeComponent();
-        DataContext = new UserRegistrationViewModel(mainVM);
+        DataContext = new UserRegistrationViewModel(mainVM, userId);
     }
 }

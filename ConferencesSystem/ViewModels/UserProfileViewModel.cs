@@ -66,7 +66,7 @@ namespace ConferencesSystem.ViewModels
 			: new Bitmap(_baseImagePath + _user.Image);
         public void GoToRegistrationView()
         {
-            _mainVm.CurrentView = new UserRegistrationView(_mainVm);
+            _mainVm.CurrentView = new UserRegistrationView(_mainVm, _user.Id);
         }
     }
 }

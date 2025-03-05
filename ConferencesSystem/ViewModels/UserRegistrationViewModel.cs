@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using ConferencesSystem.Models;
+using ConferencesSystem.Views;
 using ReactiveUI;
 
 namespace ConferencesSystem.ViewModels
@@ -43,12 +46,14 @@ namespace ConferencesSystem.ViewModels
     public class UserRegistrationViewModel : ViewModelBase
     {
         private MainWindowViewModel _mainVm;
-        public UserRegistrationViewModel(MainWindowViewModel mainVm)
+        private int _organizerId;
+        public UserRegistrationViewModel(MainWindowViewModel mainVm, int userId)
         {
             _mainVm = mainVm;
+            _organizerId = userId;
             _id = (_db.Users.OrderBy(u => u.Id).LastOrDefault()?.Id ?? 0) + 1;
         }
-        private User _user = new User { Activities = new List<Activity>() };
+        private User _user = new User();
         public User User { get => _user; set => this.RaiseAndSetIfChanged(ref _user, value); }
         private int _id;
         public int Id => _id;
@@ -92,19 +97,123 @@ namespace ConferencesSystem.ViewModels
         private Activity? _selectedActivity;
         public Activity? SelectedActivity { get => _selectedActivity; set => this.RaiseAndSetIfChanged(ref _selectedActivity, value); }
         private string _errorMessage = "";
-        public  string ErrorMessage{ get => _errorMessage; set => this.RaiseAndSetIfChanged(ref _errorMessage, value); }
-        public void CreateNewUser() // ок - уведомление и сохранить
+        public string ErrorMessage { get => _errorMessage; set => this.RaiseAndSetIfChanged(ref _errorMessage, value); }
+        public async void CreateNewUser() // ок - уведомление и сохранить
         {
-            // regex email
-            // regex password
+            // todo
+            // добавить картинку
             // картинка загружается
-        }        
-        public void CancelUserCreation() // отмена - данные потеряются, вы уверены? да/нет
-        {
-            
+
+            if (!await AllValidationChecksPassed()) return;
+
+            User.Id = Id;
+            User.GenderNavigation = SelectedGender;
+            User.RoleNavigation = SelectedRole;
+            if (User.RoleNavigation.Name == "модератор")
+            {
+                User.Moderator = new Moderator { ActivityType = SelectedDirection.Id, DirectionType = SelectedDirection.Id };
+            }
+            else if (User.RoleNavigation.Name == "жюри")
+            {
+                User.Juror = new Juror { Direction = SelectedDirection.Id };
+            }
+            if (AttachToActivity)
+            {
+                User.Activities.Add(SelectedActivity);
+            }
+
+            try
+            {
+                _db.Users.Add(User);
+                _db.SaveChanges();
+                await ShowError("Новый пользователь сохранен успешно", 5000);
+                GoBack();
+            }
+            catch
+            {
+                await ShowError("Что-то пошло не так", 10000);
+            }
         }
+        private async Task<bool> AllValidationChecksPassed()
+        {
+            var message = RequiredFieldsAreFilledIn();
+            if (message != null)
+            {
+                await ShowError(message, 5000);
+                return false;
+            }
 
+            if (!PasswordIsValid())
+            {
+                await ShowError("Не соблюдены условия к паролю:\n•не менее 6 символов;\n• заглавные и строчные буквы;\n" +
+                    "• не менее одного спецсимвола;\r\n• не менее одной цифры.", 5000);
+                return false;
+            }
 
+            if (User.Password != RePassword)
+            {
+                await ShowError("Пароли не совпадают", 5000);
+                return false;
+            }
 
+            if (!EmailIsValid())
+            {
+                await ShowError("Почта указана неверно", 5000);
+                return false;
+            }
+
+            return true;
+        }
+        private async Task ShowError(string message, int ms)
+        {
+            ErrorMessage = message;
+            await Task.Delay(ms);
+            ErrorMessage = "";
+        }
+        private string? RequiredFieldsAreFilledIn()
+        {
+            string message = "";
+            if (string.IsNullOrWhiteSpace(User.FullName)) message += "Имя\n";
+            if (SelectedGender == null) message += "Пол\n";
+            if (SelectedRole == null) message += "Роль\n";
+            if (string.IsNullOrWhiteSpace(User.Mail)) message += "Почтовый адрес\n";
+            if (string.IsNullOrWhiteSpace(User.PhoneNumber)) message += "Номер телефона\n";
+            if (SelectedDirection == null) message += "Направление\n";
+            if (string.IsNullOrWhiteSpace(User.Password)) message += "Пароль\n";
+            if (string.IsNullOrWhiteSpace(RePassword)) message += "Повторение пароля\n";
+            return message == "" ? null : "Обязательные поля не заполнены:\n" + message;
+        }
+        private bool PasswordIsValid()
+        {
+            // ^ и $ - начало и конец
+            // ?=.* - есть хотя бы одно из
+            // (?=.*) - перечисляются группы: заглавных и маленьких букв, цифр, спец. символов
+            // .{6,} - не менее 6 символов
+            Regex regex = new Regex(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{6,}$");
+            var match = regex.Match(User.Password);
+            return match.Success;
+        }
+        private bool EmailIsValid()
+        {
+            // ^ и $ - начало и конец
+            // [] - можно использовать такие символы
+            // []+ - один и более символоы
+            // \. - экранирование точки
+            Regex regex = new Regex(@"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+            var match = regex.Match(User.Mail);
+            return match.Success;
+        }
+        public async Task CancelUserCreation() // отмена - данные потеряются, вы уверены? да/нет
+        {
+            СonfirmСancellation = true;
+            await ShowError("Вы уверены, что хотите отменить запись? Все данные будут утеряны. В течение 10 секунд вы можете подтвердить отмену", 10000);
+            СonfirmСancellation = false;
+        }
+        private bool _confirmСancellation = false;
+        public bool СonfirmСancellation { get => _confirmСancellation; set => this.RaiseAndSetIfChanged(ref _confirmСancellation, value); }
+        public void GoBack()
+        {
+            _mainVm.CurrentView = new UserProfileView(_mainVm, _organizerId);
+        }
     }
 }
