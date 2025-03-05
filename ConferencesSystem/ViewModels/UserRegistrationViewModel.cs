@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using ConferencesSystem.Models;
 using ConferencesSystem.Views;
 using ReactiveUI;
@@ -52,8 +58,10 @@ namespace ConferencesSystem.ViewModels
             _mainVm = mainVm;
             _organizerId = userId;
             _id = (_db.Users.OrderBy(u => u.Id).LastOrDefault()?.Id ?? 0) + 1;
+            _user = new User();
+            _userAvatar = new Bitmap(_baseImagePath + "empty.jpg");
         }
-        private User _user = new User();
+        private User _user;
         public User User { get => _user; set => this.RaiseAndSetIfChanged(ref _user, value); }
         private int _id;
         public int Id => _id;
@@ -214,6 +222,43 @@ namespace ConferencesSystem.ViewModels
         public void GoBack()
         {
             _mainVm.CurrentView = new UserProfileView(_mainVm, _organizerId);
+        }
+        private Bitmap _userAvatar;
+        public Bitmap UserAvatar { get => _userAvatar; set => this.RaiseAndSetIfChanged(ref _userAvatar, value); }
+        public static FilePickerFileType ImageAll { get; } = new("All Images")
+        {
+            Patterns = [ "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.webp" ]
+        };
+        public async void UpdateAvatar()
+        {
+            // получение провайдера файловой системы
+            var desktop = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+            var provider = desktop?.MainWindow?.StorageProvider;
+            // открытие диалога выбора файла
+            var selectImages = await provider.OpenFilePickerAsync(
+                    new FilePickerOpenOptions()
+                    {
+                        Title = "Выберите изображение",
+                        AllowMultiple = false,
+                        FileTypeFilter =[ ImageAll ]
+                    }
+            );
+            // чтение выбранного файла в поток
+            await using var readStream = await selectImages[0].OpenReadAsync();
+            using var memoryStream = new MemoryStream();
+            await readStream.CopyToAsync(memoryStream);
+            // генерация уникального имени файлае
+            string uniqueFileName = Guid.NewGuid().ToString();
+            string filePath = _baseImagePath + uniqueFileName;
+            // запись файла в папку со всеми картинками
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                memoryStream.WriteTo(fileStream);
+            }
+            // запись пользователю имени картинки
+            User.Image = uniqueFileName;
+            // обновление свойства с отображение картинки
+            UserAvatar = User.Image == null ? new Bitmap(_baseImagePath + "empty.jpg") : new Bitmap(_baseImagePath + User.Image);
         }
     }
 }

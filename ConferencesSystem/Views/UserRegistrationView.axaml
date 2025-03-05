@@ -74,6 +74,8 @@
 
 				</StackPanel>
 				<StackPanel Grid.Column="2">
+					<Image Source="{Binding UserAvatar}" MaxHeight="200" MaxWidth="300" HorizontalAlignment="Left"/>
+					<Button Content="Изменить фото" Command="{Binding UpdateAvatar}"/>
 
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="Пароль:"/>
