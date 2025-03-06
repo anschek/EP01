@@ -40,6 +40,25 @@ namespace REG_MARK_LIB.Test
                 bool result = RegMarkService.CheckMark(mark);
                 Assert.IsFalse(result);
             }
+            [TestMethod]
+            public void GetNextMarkAfter_GetNextRegNum_ResultEqualExpected()
+            {
+                string mark = "a001aa52";
+                string expected = "a002aa52";
+
+                string result = RegMarkService.GetNextMarkAfter(mark);
+                Assert.AreEqual(expected, result);
+            }
+            [TestMethod]
+            public void GetNextMarkAfter_GetSeries_ResultEqualExpected()
+            {
+                string mark = "a999aa52";
+                string expected = "a001ab52";
+
+                string result = RegMarkService.GetNextMarkAfter(mark);
+                Assert.AreEqual(expected, result);
+
+            }
         }
         [TestClass]
         public class NegativeTests
@@ -51,6 +70,23 @@ namespace REG_MARK_LIB.Test
 
                 bool result = RegMarkService.CheckMark(mark);
                 Assert.IsFalse(result);
+            }
+            [TestMethod]
+            public void GetNextMarkAfter_WrongRegNum_ResultEqualArgument()
+            {
+                string mark = "ô001aa10";
+
+                string result = RegMarkService.GetNextMarkAfter(mark);
+                Assert.AreEqual(mark, result);
+
+            }
+            [TestMethod]
+            public void GetNextMarkAfter_NumbersIsLast_ResultEqualArgument()
+            {
+                string mark = "õ999õõ10";
+
+                string result = RegMarkService.GetNextMarkAfter(mark);
+                Assert.AreEqual(mark, result);
             }
         }
     }
