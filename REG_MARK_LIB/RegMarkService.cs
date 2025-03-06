@@ -20,10 +20,10 @@ namespace REG_MARK_LIB
         {
             series = series.ToLower();
             return series.All(allowedLetters.Contains);
-        }       
+        }
         private static bool RegNumIsCorrect(string regNum)
         {
-            if(int.TryParse(regNum, out var result))
+            if (int.TryParse(regNum, out var result))
             {
                 return true;
             }
@@ -37,6 +37,51 @@ namespace REG_MARK_LIB
             if (!RegionIsCorrect(mark[6..])) return false;
             if (!SeriesIsCorrect(mark[0] + mark[4..6])) return false;
             return true;
+        }
+
+        private static string GetNextSeries(string series)
+        {
+            int nextIndex;
+            if (series[1..3] == "xx")
+            {
+                nextIndex = allowedLetters.IndexOf(series[0]) + 1;
+                return allowedLetters[nextIndex] + "aa";
+            }
+            else if (series[2] == 'x')
+            {
+                nextIndex = allowedLetters.IndexOf(series[1]) + 1;
+                return series[0] + allowedLetters[nextIndex] + "a";
+            }
+            else
+            {
+                nextIndex = allowedLetters.IndexOf(series[2]) + 1;
+                return series[0..2] + allowedLetters[nextIndex];
+            }
+
+        }
+        // Метод принимает номерной знак в формате a999aa999 (латинскими буквами) и выдает следующий номер в данной серии или создает следующую серию
+        public static string GetNextMarkAfter(string mark)
+        {
+            if (!CheckMark(mark)) return mark; // знак не корректен
+
+            int currentRegNum = int.Parse(mark[1..4]);
+            if (currentRegNum < 999) // следующий номер в этой серии
+            {
+                ++currentRegNum;
+                string newRegNum = currentRegNum.ToString();
+                if (currentRegNum < 10) newRegNum = "00" + newRegNum;
+                else if (currentRegNum < 100) newRegNum = "0" + newRegNum;
+                
+                return mark[0] + newRegNum + mark[4..];
+            }
+            else // новый номер в новой серии
+            {
+                string series = mark[0] + mark[4..6];
+                series = series.ToLower();
+                if (series == "xxx") return mark; // знака больше данного не существует
+                string newSeries = GetNextSeries(series);
+                return newSeries[0] + "001" + newSeries[1..] + mark[6..];
+            }
         }
     }
 }
