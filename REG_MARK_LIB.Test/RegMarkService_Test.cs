@@ -59,6 +59,46 @@ namespace REG_MARK_LIB.Test
                 Assert.AreEqual(expected, result);
 
             }
+            [TestMethod]
+            public void GetNextMarkAfterInRange_PassCorrectArgs_ResultEqualExpected()
+            {
+                string mark = "a120ab52";
+                string start = "a001aa52";
+                string end = "b001bb52";
+                string expected = "a121ab52";
+
+                string result = RegMarkService.GetNextMarkAfterInRange(mark, start, end);
+                Assert.AreEqual(expected, result);
+            }
+            [TestMethod]
+            public void GetNextMarkAfterInRange_PrevMarkEqualRangeEnd_ResultEqualExpected()
+            {
+                string mark = "a120ab52";
+                string start = "a001aa52";
+                string expected = "out of stock";
+
+                string result = RegMarkService.GetNextMarkAfterInRange(mark, start, mark);
+                Assert.AreEqual(expected, result);
+            }
+            [TestMethod]
+            public void GetCombinationsCountInRange_PassCorrectArgs_ResultEqualExpected()
+            {
+                string mark1 = "a120ab52";
+                string mark2 = "a130ab52";
+                int expected = 10;
+
+                int result = RegMarkService.GetCombinationsCountInRange(mark1, mark2);
+                Assert.AreEqual(expected, result);
+            }
+            [TestMethod]
+            public void GetCombinationsCountInRange_Mark1EqualMark2_ResultEqualExpected()
+            {
+                string mark1 = "a120ab52";
+                int expected = 0;
+
+                int result = RegMarkService.GetCombinationsCountInRange(mark1, mark1);
+                Assert.AreEqual(expected, result);
+            }
         }
         [TestClass]
         public class NegativeTests
@@ -87,6 +127,58 @@ namespace REG_MARK_LIB.Test
 
                 string result = RegMarkService.GetNextMarkAfter(mark);
                 Assert.AreEqual(mark, result);
+            }
+            [TestMethod]
+            public void GetNextMarkAfterInRange_WrongRangeLimits_ResultEqualExpected()
+            {
+                string mark = "a120ab52";
+                string start = "b001bb52";
+                string end = "a001aa52";
+                string expected = "out of stock";
+
+                string result = RegMarkService.GetNextMarkAfterInRange(mark, start, end);
+                Assert.AreEqual(expected, result);
+            }
+            [TestMethod]
+            public void GetNextMarkAfterInRange_WrongRegNumber_ResultEqualArgument()
+            {
+                string mark = "aaaaaaaaa";
+                string start = "a001aa100";
+                string end = "b001bb100";
+
+                string result = RegMarkService.GetNextMarkAfterInRange(mark, start, end);
+                Assert.AreEqual(mark, mark);
+            }
+            [TestMethod]
+            public void GetCombinationsCountInRange_WrongMarks_ResultEqualExpected()
+            {
+                string mark1 = "aa120ab52";
+                string mark2 = "a130ab999";
+                int expected = -1;
+
+                int result = RegMarkService.GetCombinationsCountInRange(mark1, mark2);
+                Assert.AreEqual(expected, result);
+            }
+            [TestMethod]
+            public void GetCombinationsCountInRange_MarksRegionsNotEqual_ResultEqualExpected()
+            {
+                string mark1 = "a120ab52";
+                string mark2 = "a130ab101";
+                int expected = -1;
+
+                int result = RegMarkService.GetCombinationsCountInRange(mark1, mark2);
+                Assert.AreEqual(expected, result);
+            }
+            [TestMethod]
+            public void GetCombinationsCountInRange_WrongRangeLimits_ResultEqualExpected()
+            {
+                string mark1 = "a130ab52";
+                string mark2 = "a120ab52";
+                int expected = -1;
+
+                int result = RegMarkService.GetCombinationsCountInRange(mark1, mark2);
+                Assert.AreEqual(expected, result);
+
             }
         }
     }
