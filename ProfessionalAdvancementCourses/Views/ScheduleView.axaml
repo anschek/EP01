@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProfessionalAdvancementCourses.Views.ScheduleView"
+			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
+            x:DataType="vm:ScheduleViewModel">
+	<StackPanel>
+		<TextBlock Text="Страница расписания"/>
+		<StackPanel Orientation="Horizontal">
+			<ComboBox ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" DisplayMemberBinding="{Binding Name}"/>
+			<DatePicker SelectedDate="{Binding SelectedDate}" MinYear="2025-03-01" MaxYear="2025-03-31"/>
+			<Button Content="Показать" Command="{Binding GetSchedules}"/>
+		</StackPanel>
+		<ListBox ItemsSource="{Binding Schedules}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding Time}"/>
+						<TextBlock Text="{Binding Teacher}"/>
+						<TextBlock Text="{Binding Lesson}"/>
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+		<TextBlock Text="{Binding ErrorText}"/>
+	</StackPanel>
+</UserControl>
