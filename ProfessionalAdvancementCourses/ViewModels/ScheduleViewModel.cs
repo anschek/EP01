@@ -8,15 +8,12 @@ using ReactiveUI;
 
 namespace ProfessionalAdvancementCourses.ViewModels
 {
-	public class ScheduleViewModel : ReactiveObject
+	public class ScheduleViewModel : ViewModelBase
 	{
-		PostgresContext _db;
-		public ScheduleViewModel()
+		public ScheduleViewModel() : base()
 		{
-			_db = new PostgresContext();
 			_schedules = new();
 			_errorText = "";
-
         }
 		public List<Group> Groups => _db.Groups.ToList();
         DateTime _selectedDate;
@@ -40,12 +37,10 @@ namespace ProfessionalAdvancementCourses.ViewModels
 		private ScheduleDto MapToScheduleDto(Schedule schedule) => new()
 		{
 			Time = schedule.DateTime.ToString("HH:mm"),
-			Teacher = schedule?.TeacherLesson?.Teacher?.IdNavigation?.ToString() ?? "null",
-			Lesson = schedule?.TeacherLesson?.LessonGroup?.Lesson?.ToString() ?? "null",
+			Teacher = schedule?.TeacherLesson.Teacher.IdNavigation.ToString() ?? "null",
+			Lesson = schedule?.TeacherLesson.LessonGroup.Lesson.ToString() ?? "null",
 		};
-		
 
-		List<Schedule> _baseSchedules;
 		List<ScheduleDto> _schedules;
         public List<ScheduleDto> Schedules { get => _schedules; private set => this.RaiseAndSetIfChanged(ref _schedules, value); }
 

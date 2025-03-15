@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ProfessionalAdvancementCourses.Views.ScheduleView"
 			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
-            x:DataType="vm:ScheduleViewModel">
+             x:DataType="vm:ScheduleViewModel">
 	<StackPanel>
 		<TextBlock Text="Страница расписания"/>
 		<StackPanel Orientation="Horizontal">
