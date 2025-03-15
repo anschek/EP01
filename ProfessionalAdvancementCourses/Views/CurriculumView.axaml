@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProfessionalAdvancementCourses.Views.CurriculumView"
+			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
+             x:DataType="vm:CurriculumViewModel">
+	<StackPanel>
+		<TextBlock Text="Учебный план"/>
+		<StackPanel Orientation="Horizontal">
+			<ComboBox ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" DisplayMemberBinding="{Binding Name}"/>
+			<Button Content="Показать" Command="{Binding GetCurriculum}"/>
+		</StackPanel>
+		<ListBox ItemsSource="{Binding Curriculum}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding Lesson}"/>
+						<TextBlock Text="{Binding TotalPlannedHours}"/>
+						<TextBlock Text="{Binding RemainingHours}"/>
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</StackPanel>
+</UserControl>
