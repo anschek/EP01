@@ -6,6 +6,5 @@ namespace ProfessionalAdvancementCourses.Models.DTOs
         public string Time { get; set; }
         public string Teacher {  get; set; }
         public string Lesson { get; set; }
-
     }
 }

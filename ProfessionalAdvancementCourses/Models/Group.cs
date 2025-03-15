@@ -9,15 +9,15 @@ public partial class Group
 
     public string Name { get; set; } = null!;
 
-    public int? SpecialityId { get; set; }
+    public int SpecialityId { get; set; }
 
-    public int? DepartmentId { get; set; }
+    public int DepartmentId { get; set; }
 
-    public virtual Department? Department { get; set; }
+    public virtual Department Department { get; set; } = null!;
 
     public virtual ICollection<Lessonsgroup> Lessonsgroups { get; set; } = new List<Lessonsgroup>();
 
-    public virtual Specialty? Speciality { get; set; }
+    public virtual Specialty Speciality { get; set; } = null!;
 
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
 }

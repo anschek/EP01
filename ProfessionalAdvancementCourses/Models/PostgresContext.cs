@@ -43,7 +43,7 @@ public partial class PostgresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql();
+        => optionsBuilder.UseNpgsql("Host=aws-0-ap-southeast-2.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.ublncqbjtsgafunzqmfw;Password=motfhLHPGZNJ45Ct");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -92,12 +92,10 @@ public partial class PostgresContext : DbContext
 
             entity.HasOne(d => d.Department).WithMany(p => p.Groups)
                 .HasForeignKey(d => d.DepartmentId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("groups_department_id_fkey");
 
             entity.HasOne(d => d.Speciality).WithMany(p => p.Groups)
                 .HasForeignKey(d => d.SpecialityId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("groups_speciality_id_fkey");
         });
 
@@ -117,12 +115,10 @@ public partial class PostgresContext : DbContext
 
             entity.HasOne(d => d.LessonType).WithMany(p => p.Lessons)
                 .HasForeignKey(d => d.LessonTypeId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("lessons_lesson_type_id_fkey");
 
             entity.HasOne(d => d.Subject).WithMany(p => p.Lessons)
                 .HasForeignKey(d => d.SubjectId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("lessons_subject_id_fkey");
         });
 
@@ -135,15 +131,16 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.GroupId).HasColumnName("group_id");
             entity.Property(e => e.LessonId).HasColumnName("lesson_id");
+            entity.Property(e => e.TotalPlannedHours)
+                .HasDefaultValue(10)
+                .HasColumnName("total_planned_hours");
 
             entity.HasOne(d => d.Group).WithMany(p => p.Lessonsgroups)
                 .HasForeignKey(d => d.GroupId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("lessonsgroups_group_id_fkey");
 
             entity.HasOne(d => d.Lesson).WithMany(p => p.Lessonsgroups)
                 .HasForeignKey(d => d.LessonId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("lessonsgroups_lesson_id_fkey");
         });
 
@@ -173,7 +170,6 @@ public partial class PostgresContext : DbContext
 
             entity.HasOne(d => d.TeacherLesson).WithMany(p => p.Schedules)
                 .HasForeignKey(d => d.TeacherLessonId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("schedules_teacher_lesson_id_fkey");
         });
 
@@ -202,7 +198,6 @@ public partial class PostgresContext : DbContext
 
             entity.HasOne(d => d.Group).WithMany(p => p.Students)
                 .HasForeignKey(d => d.GroupId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("students_group_id_fkey");
 
             entity.HasOne(d => d.IdNavigation).WithOne(p => p.Student)
@@ -256,7 +251,6 @@ public partial class PostgresContext : DbContext
 
             entity.HasOne(d => d.TeacherLesson).WithMany(p => p.Teacherloads)
                 .HasForeignKey(d => d.TeacherLessonId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("teacherloads_teacher_lesson_id_fkey");
         });
 
@@ -272,12 +266,10 @@ public partial class PostgresContext : DbContext
 
             entity.HasOne(d => d.LessonGroup).WithMany(p => p.Teacherslessons)
                 .HasForeignKey(d => d.LessonGroupId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("teacherslessons_lesson_group_id_fkey");
 
             entity.HasOne(d => d.Teacher).WithMany(p => p.Teacherslessons)
                 .HasForeignKey(d => d.TeacherId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("teacherslessons_teacher_id_fkey");
         });
 

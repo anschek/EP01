@@ -7,9 +7,9 @@ public partial class Schedule
 {
     public int Id { get; set; }
 
-    public int? TeacherLessonId { get; set; }
+    public int TeacherLessonId { get; set; }
 
     public DateTime DateTime { get; set; }
 
-    public virtual Teacherslesson? TeacherLesson { get; set; }
+    public virtual Teacherslesson TeacherLesson { get; set; } = null!;
 }

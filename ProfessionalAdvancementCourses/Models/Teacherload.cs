@@ -7,7 +7,7 @@ public partial class Teacherload
 {
     public int Id { get; set; }
 
-    public int? TeacherLessonId { get; set; }
+    public int TeacherLessonId { get; set; }
 
     public int Hours { get; set; }
 
@@ -15,5 +15,5 @@ public partial class Teacherload
 
     public DateTime EndOfPeriod { get; set; }
 
-    public virtual Teacherslesson? TeacherLesson { get; set; }
+    public virtual Teacherslesson TeacherLesson { get; set; } = null!;
 }
