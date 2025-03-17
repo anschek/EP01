@@ -7,7 +7,8 @@
 			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
              x:DataType="vm:ScheduleViewModel">
 	<StackPanel>
-		<TextBlock Text="Страница расписания"/>
+		<TextBlock Text="Расписание" Classes="h2"/>
+		<TextBlock Text="Выберите группу и дату занятий"/>
 		<StackPanel Orientation="Horizontal">
 			<ComboBox ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" DisplayMemberBinding="{Binding Name}"/>
 			<DatePicker SelectedDate="{Binding SelectedDate}" MinYear="2025-03-01" MaxYear="2025-03-31"/>

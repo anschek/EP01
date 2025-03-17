@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProfessionalAdvancementCourses.Views.DescriptionView">
+	<StackPanel>
+		<TextBlock Classes="h2" Text="Главная страница"/>
+		
+		<TextBlock Classes="h3" Text="Удобное расписание занятий"/>
+		<TextBlock Text="- Получите доступ к детальному расписанию своей группы: узнайте даты, время проведения, имена преподавателей, предметы занятий и формат занятий (лекция, практика)"/>
+		<TextBlock Text="- Планируйте свое время эффективно благодаря четкой и структурированной информации"/>			
+		
+		<TextBlock Classes="h3" Text="Прозрачный учебный план"/>
+		<TextBlock Text="- Отслеживайте, сколько часов уже освоено и сколько осталось по каждой дисциплине"/>
+		<TextBlock Text="- Всегда будьте в курсе прогресса обучения и своих ближайших задач"/>
+		
+		<TextBlock Classes="h3" Text="Простая регистрация для новых пользователей"/>
+		<TextBlock Text="- Станьте студентом в несколько кликов: выберите специальность и формат обучения (очный или заочный)"/>
+		<TextBlock Text="- Ознакомьтесь с будущим учебным планом и узнайте стоимость курса перед началом обучения"/>
+		
+	</StackPanel>
+</UserControl>

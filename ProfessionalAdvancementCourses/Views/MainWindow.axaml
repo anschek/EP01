@@ -11,7 +11,7 @@
 
 	<Grid ColumnDefinitions="0.2*,*" RowDefinitions="0.2*, *">
 		<DockPanel  Grid.Column="1" Grid.Row="0" LastChildFill="False" VerticalAlignment="Center">
-			<TextBlock Text="Курсы повышения квалификации" />
+			<TextBlock Classes="h1" Text="Курсы повышения квалификации" />
 			<Button Command="{Binding GoToStudentRegistration}" Content="Хочу учиться" DockPanel.Dock="Right"/>
 		</DockPanel>
 		

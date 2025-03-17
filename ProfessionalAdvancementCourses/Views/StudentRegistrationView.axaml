@@ -6,11 +6,11 @@
              x:Class="ProfessionalAdvancementCourses.Views.StudentRegistrationView"
 			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
              x:DataType="vm:StudentRegistrationViewModel">
-	<Grid RowDefinitions="20,*,10">
-		<TextBlock Grid.Row="0" Text="Регистрация"/>
+	<Grid RowDefinitions="40,*,10">
+		<TextBlock Grid.Row="0" Text="Регистрация" Classes="h2"/>
 		<ScrollViewer Grid.Row="1" >
 			<StackPanel>
-				<TextBlock Text="Выбор курса" FontWeight="DemiBold"/>
+				<TextBlock Text="Выбор курса" Classes="h3"/>
 
 				<TextBlock Text="Выберите специальность"/>
 				<ComboBox ItemsSource="{Binding Specialties}" SelectedItem="{Binding SelectedSpeciality}" DisplayMemberBinding="{Binding Name}"/>
@@ -35,7 +35,7 @@
 					<TextBox Text="{Binding TuitionFee, StringFormat='{}{0:F2}'}" IsEnabled="False"/>
 				</StackPanel>
 
-				<TextBlock Text="Личная информация" FontWeight="DemiBold"/>
+				<TextBlock Text="Личная информация"  Classes="h3"/>
 
 				<TextBlock Text="Фамилия"/>
 				<TextBox Text="{Binding User.SecondName}"/>

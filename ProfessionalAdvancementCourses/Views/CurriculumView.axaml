@@ -7,7 +7,8 @@
 			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
              x:DataType="vm:CurriculumViewModel">
 	<StackPanel>
-		<TextBlock Text="Учебный план"/>
+		<TextBlock Text="Учебный план" Classes="h2"/>
+		<TextBlock Text="Выберите группу"/>
 		<StackPanel Orientation="Horizontal">
 			<ComboBox ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" DisplayMemberBinding="{Binding Name}"/>
 			<Button Content="Показать" Command="{Binding GetCurriculum}"/>
@@ -17,8 +18,8 @@
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="{Binding Lesson}"/>
-						<TextBlock Text="{Binding TotalPlannedHours}"/>
-						<TextBlock Text="{Binding RemainingHours}"/>
+						<TextBlock Text="{Binding TotalPlannedHours,StringFormat='Часов всего: {0}'}"/>
+						<TextBlock Text="{Binding RemainingHours,StringFormat='Часов осталось: {0}'}"/>
 					</StackPanel>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
