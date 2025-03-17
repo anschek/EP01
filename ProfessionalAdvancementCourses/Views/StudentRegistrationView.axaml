@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProfessionalAdvancementCourses.Views.StudentRegistrationView"
+			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
+             x:DataType="vm:StudentRegistrationViewModel">
+	<Grid RowDefinitions="20,*,10">
+		<TextBlock Grid.Row="0" Text="Регистрация"/>
+		<ScrollViewer Grid.Row="1" >
+			<StackPanel>
+				<TextBlock Text="Выбор курса" FontWeight="DemiBold"/>
+
+				<TextBlock Text="Выберите специальность"/>
+				<ComboBox ItemsSource="{Binding Specialties}" SelectedItem="{Binding SelectedSpeciality}" DisplayMemberBinding="{Binding Name}"/>
+				<TextBlock Text="Выберите отделение"/>
+				<ComboBox ItemsSource="{Binding Departments}" SelectedItem="{Binding SelectedDepartment}" DisplayMemberBinding="{Binding Name}"/>
+				
+				<StackPanel IsVisible="{Binding CourseIsSet}">
+					<TextBlock Text="Ваша группа" />
+					<TextBox Text="{Binding SelectedGroup.Name}" IsEnabled="False"/>
+					<TextBlock Text="Ваш будущий учебный план" />
+					<ListBox ItemsSource="{Binding Curriculum}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding Lesson}"/>
+									<TextBlock Text="{Binding TotalPlannedHours}"/>
+								</StackPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+					<TextBlock Text="Средняя стоимость обучения"/>
+					<TextBox Text="{Binding TuitionFee, StringFormat='{}{0:F2}'}" IsEnabled="False"/>
+				</StackPanel>
+
+				<TextBlock Text="Личная информация" FontWeight="DemiBold"/>
+
+				<TextBlock Text="Фамилия"/>
+				<TextBox Text="{Binding User.SecondName}"/>
+				<TextBlock Text="Имя"/>
+				<TextBox Text="{Binding User.FirstName}"/>
+				<TextBlock Text="Отчество"/>
+				<TextBox Text="{Binding User.MiddleName}"/>
+				<TextBlock Text="Почта"/>
+				<TextBox Text="{Binding UserMail}"/>
+				<TextBlock Text="Телефон"/>
+				<MaskedTextBox Mask="+7 (000) 000-00-00" Text="{Binding User.Phone}"/>
+
+				<StackPanel Orientation="Horizontal">
+					<Button Content="Регистрация" Command="{Binding CreateNewUser}" />
+					<TextBlock Text="{Binding MessageText}" Foreground="{Binding MessageColor}" TextWrapping="Wrap"/>
+				</StackPanel>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>
