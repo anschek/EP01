@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProfessionalAdvancementCourses.Models;
 using ProfessionalAdvancementCourses.Models.DTOs;
+using ProfessionalAdvancementCourses.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -22,30 +23,9 @@ namespace ProfessionalAdvancementCourses.ViewModels
 		public List<CurriculumDto> Curriculum { get => _curriculum; set =>  this.RaiseAndSetIfChanged(ref _curriculum, value); }
 		public void GetCurriculum()
 		{
-			Curriculum = _db.Lessonsgroups
-				.Include(lg => lg.Teacherslessons)
-				.ThenInclude(tl => tl.Schedules)
-				.Include(lg => lg.Group)
-				.Include(lg => lg.Lesson.Subject)
-				.Include(lg => lg.Lesson.LessonType)
+			Curriculum = CurriculumService.GetCurriculum(_db)
 				.Where(lg => _selectedGroup!=null && lg.GroupId==_selectedGroup.Id)
-				.Select(MapToCurriculDto).ToList();
-		}
-		private CurriculumDto MapToCurriculDto(Lessonsgroup lg)
-		{
-			int usedHours = lg.Lesson.Lessonsgroups
-				.SelectMany(lg => lg.Teacherslessons)
-				.SelectMany(tl => tl.Schedules)
-				.Where(static sch => sch.DateTime < DateTime.Now).Count() * lg.Lesson.Hours;
-
-            int remainingHours = lg.TotalPlannedHours > usedHours ? lg.TotalPlannedHours - usedHours : 0;
-
-			return new()
-			{
-				Lesson = lg.Lesson.ToString(),
-				TotalPlannedHours = lg.TotalPlannedHours,
-				RemainingHours = remainingHours
-			};
+				.Select( CurriculumService.MapToCurriculDto).ToList();
 		}
     }
 }

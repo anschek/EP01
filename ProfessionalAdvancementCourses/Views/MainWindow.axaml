@@ -9,12 +9,18 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="ProfessionalAdvancementCourses">
 
-	<Grid ColumnDefinitions="0.2*,*">
-		<StackPanel Grid.Column="0">
+	<Grid ColumnDefinitions="0.2*,*" RowDefinitions="0.2*, *">
+		<DockPanel  Grid.Column="1" Grid.Row="0" LastChildFill="False" VerticalAlignment="Center">
+			<TextBlock Text="Курсы повышения квалификации" />
+			<Button Command="{Binding GoToStudentRegistration}" Content="Хочу учиться" DockPanel.Dock="Right"/>
+		</DockPanel>
+		
+		<StackPanel Grid.Column="0" Grid.Row="1">
 			<Button Command="{Binding GoToDescription}" Content="Главная" />
 			<Button Command="{Binding GoToSchedule}" Content="Расписание" />
+			<Button Command="{Binding GoToCurriculum}" Content="Учебные планы" />
 		</StackPanel>
-		<ContentControl Grid.Column="1" Content="{Binding CurrentView}"/>
+		<ContentControl Grid.Column="1" Grid.Row="1" Content="{Binding CurrentView}"/>
 	</Grid>
 
 </Window>
