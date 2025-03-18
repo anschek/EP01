@@ -6,7 +6,7 @@
              x:Class="ProfessionalAdvancementCourses.Views.CurriculumView"
 			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
              x:DataType="vm:CurriculumViewModel">
-	<StackPanel>
+	<StackPanel  Margin="10">
 		<TextBlock Text="Учебный план" Classes="h2"/>
 		<TextBlock Text="Выберите группу"/>
 		<StackPanel Orientation="Horizontal">

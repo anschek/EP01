@@ -6,7 +6,7 @@
              x:Class="ProfessionalAdvancementCourses.Views.ScheduleView"
 			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
              x:DataType="vm:ScheduleViewModel">
-	<StackPanel>
+	<StackPanel  Margin="10">
 		<TextBlock Text="Расписание" Classes="h2"/>
 		<TextBlock Text="Выберите группу и дату занятий"/>
 		<StackPanel Orientation="Horizontal">

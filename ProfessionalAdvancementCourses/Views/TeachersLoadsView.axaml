@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProfessionalAdvancementCourses.Views.TeachersLoadsView"
+			 xmlns:vm="using:ProfessionalAdvancementCourses.ViewModels"
+             x:DataType="vm:TeachersLoadsViewModel">
+	<StackPanel>
+		<TextBlock Classes="h2" Text="Нагрузка преподавателей"/>
+		<TextBlock Text="Выберите преподавателя"/>
+		<StackPanel Orientation="Horizontal">
+			<ComboBox ItemsSource="{Binding Teachers}" SelectedItem="{Binding SelectedTeacher}"/>
+			<Button Content="Показать" Command="{Binding GetTeacherLoad}"/>
+		</StackPanel>
+		<ListBox ItemsSource="{Binding Loads}" MaxHeight="400">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding Group}"/>
+						<TextBlock Text="{Binding Lesson}"/>
+						<TextBlock Text="{Binding Hours, StringFormat='часов: {0}'}"/>
+						<TextBlock Text="{Binding HourlyRate, StringFormat='стоимость за час: {0}'}"/>
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</StackPanel>
+</UserControl>
