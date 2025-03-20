@@ -28,7 +28,7 @@ fun DatePicker(selectedDate: MutableState<LocalDate>, action: ()-> Unit) {
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            selectedDate.value = LocalDate.of(year, month+1, day)
+            selectedDate.value = LocalDate.of(mYear, mMonth+1, mDayOfMonth)
             action()
         }, year, month, day
     )
@@ -40,6 +40,6 @@ fun DatePicker(selectedDate: MutableState<LocalDate>, action: ()-> Unit) {
         ) {
             Text(text = "Выбрать дату")
         }
-        Text(text = "Выбрано: ${day}.${month+1}.${year}")
+        Text(text = "Выбрано: ${selectedDate.value.dayOfMonth}.${selectedDate.value.month.ordinal+1}.${selectedDate.value.year}")
     }
 }
