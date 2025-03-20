@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -17,13 +19,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.professionaladvancementcoursesmobile.data.Group
 import com.example.professionaladvancementcoursesmobile.data.User
+import com.example.professionaladvancementcoursesmobile.data.dto.TeacherLoadDto
 import com.example.professionaladvancementcoursesmobile.presentation.components.ComboBox
 import com.example.professionaladvancementcoursesmobile.presentation.navigation.NavigationRoutes
 import com.example.professionaladvancementcoursesmobile.presentation.viewmodels.TeacherLoadViewModel
 
 @Composable
 fun TeacherLoadScreen(navController: NavController, user: User?) {
-
     val vm: TeacherLoadViewModel = viewModel()
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -48,6 +50,24 @@ fun TeacherLoadScreen(navController: NavController, user: User?) {
             },
             {it.name}
         )
-        Text(if(vm.teacherLoads.value.count() > 0) vm.teacherLoads.value.toString() else "Нагрузка не определена")
+        Text(if(vm.teacherLoadsDto.count() == 0) "Нагрузка не определена" else "")
+
+        LazyColumn {
+            itemsIndexed(vm.teacherLoadsDto){_, load ->
+                LoadItem(load)
+            }
+        }
+    }
+}
+
+@Composable
+fun LoadItem(load: TeacherLoadDto){
+    Column{
+        Text("Предмет: ${load.subject}")
+        Text("Тип: ${load.lessonType}")
+    }
+    Row{
+        Text("Часы: ${load.hours}")
+        Text("Стоимость часа: ${load.hourlyRate}")
     }
 }
