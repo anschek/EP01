@@ -9,27 +9,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.Button
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.professionaladvancementcoursesmobile.data.User
 import com.example.professionaladvancementcoursesmobile.presentation.components.Alert
+import com.example.professionaladvancementcoursesmobile.presentation.components.HeaderText
 import com.example.professionaladvancementcoursesmobile.presentation.viewmodels.SignInViewModel
 import com.example.professionaladvancementcoursesmobile.presentation.navigation.NavigationRoutes
 
 @Composable
-fun SignInScreen(navController: NavController) {
+fun SignInScreen(navController: NavController, user:  MutableState<User?>) {
     val vm: SignInViewModel = viewModel()
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Авторизация")
+        HeaderText("Авторизация")
         TextField(vm.userMail, { vm.userMail = it }, label = {Text("почта")})
         TextField(vm.userPassword, { vm.userPassword = it }, label = {Text("пароль")},
             visualTransformation = PasswordVisualTransformation())
         Button(onClick = {
-            vm.signIn { navController.navigate(NavigationRoutes.USER_PROFILE) }
+            vm.signIn {
+                user.value = it
+                navController.navigate(NavigationRoutes.USER_PROFILE) }
         }) {
             Text("Войти")
         }

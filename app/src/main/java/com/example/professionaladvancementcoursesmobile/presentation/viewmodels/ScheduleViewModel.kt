@@ -65,37 +65,33 @@ class ScheduleViewModel(): ViewModel() {
                     }
                 }.decodeList<LessonGroup>()
 
-                val groups = supabase.from("groups").select{
-                    filter{
-                        Group::id isIn lessonsGroups.map { it.groupId }
-                    }
-                }.decodeList<Group>().map { it.name }
-
                 val lessons = supabase.from("lessons").select{
                     filter{
                         Lesson::id isIn lessonsGroups.map { it.lessonId }
                     }
                 }.decodeList<Lesson>()
 
-                val lessonTypes = supabase.from("lessontypes").select{
-                    filter {
-                        LessonType::id isIn lessons.map { it.lessonTypeId }
-                    }
-                }.decodeList<LessonType>().map { it.name }
-
-                val subjects = supabase.from("subjects").select{
-                    filter {
-                        Subject::id isIn lessons.map {it.subjectId}
-                    }
-                }.decodeList<Subject>().map { it.name }
+                Log.d("Schedules", lessons.toString())
 
                 for (i in 0..<schedules.value.count()){
                     schedulesDto.add(
                         ScheduleDto(
                             time = LocalDateTime.parse(schedules.value[i].dateTime).format(formatter),
-                            group = groups[i],
-                            lessonType = lessonTypes[i],
-                            subject = subjects[i]
+                            group =supabase.from("groups").select{
+                                filter {
+                                    Group::id eq lessonsGroups[i].groupId
+                                }
+                            }.decodeSingle<Group>().name,
+                            lessonType =  supabase.from("lessontypes").select{
+                                filter {
+                                    LessonType::id eq lessons[i].lessonTypeId
+                                }
+                            }.decodeSingle<LessonType>().name,
+                            subject = supabase.from("subjects").select{
+                                filter {
+                                    Subject::id eq lessons[i].subjectId
+                                }
+                            }.decodeSingle<Subject>().name
                         )
                     )
                 }

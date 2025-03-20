@@ -20,7 +20,7 @@ class SignInViewModel() : ViewModel() {
     var message by mutableStateOf("")
     private var user by mutableStateOf<User?>(null)
 
-    fun signIn(successAction: () -> Unit) {
+    fun signIn(successAction: (User?) -> Unit) {
         viewModelScope.launch {
             try {
                 Constants.supabase.auth.signInWith(Email) {
@@ -40,7 +40,7 @@ class SignInViewModel() : ViewModel() {
                     }.decodeSingle<User>()
                     user.toString()
                     Log.d("Auth", "Success")
-                    successAction()
+                    successAction(user)
                 }
             } catch (e: Exception) {
                 Log.e("Auth", e.message ?: "")
